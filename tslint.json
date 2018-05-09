@@ -1,0 +1,3 @@
+{
+  "extends": "@fortibase/scrap/tslint.json"
+}

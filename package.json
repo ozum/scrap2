@@ -1,0 +1,64 @@
+{
+  "name": "@fortibase/scrap2",
+  "version": "0.0.1",
+  "description": "experiment",
+  "main": "lib/index",
+  "types": "lib/index",
+  "scripts": {
+    "build": "moe-scripts build",
+    "build:doc": "moe-scripts doc --no-cache",
+    "commit": "moe-scripts commit",
+    "file": "f() { P=$1; P=${P/src/lib}; P=${P/.ts/.js}; tsc-watch --onSuccess \"node -r source-map-support/register ${P}\"; }; f",
+    "format": "moe-scripts format",
+    "lint": "moe-scripts lint",
+    "prepublishOnly": "npm run build",
+    "release": "git checkout master && git pull origin master && standard-version && git push --follow-tags origin master && npm publish",
+    "squash": "BRANCH=`git rev-parse --abbrev-ref HEAD` && git checkout master && git merge --squash $BRANCH && npm run commit",
+    "test": "moe-scripts test",
+    "test:update": "moe-scripts test --updateSnapshot",
+    "validate": "moe-scripts validate",
+    "watch": "concurrently 'npm run build -- --watch' 'npm run test -- --watch' | awk '{gsub(/\\033c/,\"\") system(\"\")}1'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ozum/scrap2.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ozum/scrap2/issues"
+  },
+  "homepage": "https://github.com/ozum/scrap2#readme",
+  "devDependencies": {
+    "@fortibase/scrap": "0.0.10",
+    "@types/arrify": "^1.0.3",
+    "@types/fs-extra": "^5.0.2",
+    "@types/js-beautify": "0.0.31",
+    "@types/js-yaml": "^3.11.1",
+    "@types/lodash.get": "^4.4.3",
+    "@types/lodash.has": "^4.5.3",
+    "@types/lodash.isempty": "^4.4.3",
+    "@types/lodash.isequal": "^4.5.2",
+    "@types/lodash.set": "^4.3.3",
+    "@types/lodash.uniq": "^4.5.3",
+    "@types/verror": "^1.10.3"
+  },
+  "dependencies": {
+    "arrify": "^1.0.1",
+    "empty-dir": "^1.0.0",
+    "fs-extra": "^6.0.0",
+    "internal-data": "^0.3.1",
+    "js-beautify": "^1.7.5",
+    "js-yaml": "^3.11.0",
+    "lodash.get": "^4.4.2",
+    "lodash.has": "^4.5.2",
+    "lodash.isempty": "^4.4.0",
+    "lodash.isequal": "^4.5.0",
+    "lodash.set": "^4.3.2",
+    "lodash.uniq": "^4.5.0",
+    "resettable": "^0.1.18",
+    "sort-keys": "^2.0.0",
+    "verror": "^1.10.0",
+    "winston": "^3.0.0-rc5"
+  }
+}
