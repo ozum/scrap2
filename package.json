@@ -30,7 +30,7 @@
   },
   "homepage": "https://github.com/ozum/scrap2#readme",
   "devDependencies": {
-    "@fortibase/scrap": "0.0.10",
+    "@fortibase/scrap": "0.0.11",
     "@types/arrify": "^1.0.3",
     "@types/fs-extra": "^5.0.2",
     "@types/js-beautify": "0.0.31",
