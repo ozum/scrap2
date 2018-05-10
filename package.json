@@ -1,6 +1,6 @@
 {
   "name": "@fortibase/scrap2",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "experiment",
   "main": "lib/index",
   "types": "lib/index",
