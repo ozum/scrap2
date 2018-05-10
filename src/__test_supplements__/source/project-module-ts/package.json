@@ -1,0 +1,17 @@
+{
+  "name": "project-module-ts",
+  "version": "1.0.0",
+  "description": "",
+  "main": "lib/index",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "5.0.1",
+    "echo-cli": "1.0.8",
+    "scripts-module": "file:../scripts-module.tgz"
+  }
+}

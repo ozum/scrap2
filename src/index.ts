@@ -1,6 +1,8 @@
-import ResettableFile from "./resettable-file";
-import DataObject from "./data-object";
+/// <reference path="../@types/manage-path.d.ts" />
 
-export default ResettableFile;
-export * from "./@types/index";
-export { DataObject };
+import Project from "./project";
+import ScriptKit from "./script-kit";
+export { Project };
+export { ScriptKit };
+export * from "./util";
+export * from "./@types";

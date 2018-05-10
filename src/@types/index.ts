@@ -1,81 +1,41 @@
-const winston = require("winston");
-import fs from "fs-extra";
-import { Operation } from "resettable";
-
-export const logger = new winston.createLogger();
-export type Logger = typeof logger;
-
-export interface BasicLogger {
-  none?: (message: string) => void;
-  error: (message: string) => void;
-  warn: (message: string) => void;
-  info: (message: string) => void;
-  debug: (message: string) => void;
-  verbose: (message: string) => void;
-  silly: (message: string) => void;
-}
+import Project from "../project";
+import ScriptKit from "../script-kit";
 
 /**
- * Data format supported by this library.
- * @typedef {"json"|"yaml"} Format
+ * @typedef {Object} Options to provide spawn method.
+ * @property {Array}  stdio     - stdio parameter to feed spawn
+ * @property {string} encoding  - encoding to provide to feed spawn
  */
-export type Format = "json" | "yaml";
-export type Data = { [key: string]: any };
-export type Path = string | Array<string>;
+export type SpawnOptions = { stdio?: string | Array<any>; encoding?: string };
 
 /**
- * Type to store file details.
- * @typedef {Object} Project~FileDetail
- * @property {boolean}  isSafe        - Whether it is safe to delete or change given file. (Is true if file is created automatically by module and is not modified by user.)
- * @property {fs.Stats} [stats]       - `fs.Stats` file details. Undefined if file does not exists.
- * @property {string}   [linkTarget]  - If file is a symbolic link, target path relative to module root.
- * @property {string}   [hash]        - File hash (Undefined for directories)
+ * Type for holding executable. It may be string to store executable name without arguments. For executable
+ * with arguments or options it is a tuple `[bin-name, [arg1, arg2, arg3], spawn-options]`
+ * @typedef {string|Array.<string|string[]|SpawnOptions>} Executable
+ * @example
+ * const bin = "tsc";
+ * const binWithArgs = ["tsc", ["--strict", "--target", "ESNext"]];
+ * const binWithOptions = ["tsc", ["--strict", "--target", "ESNext"], { encoding: "utf-8" }];
  */
-export interface FileDetail {
-  isSafe: boolean;
-  stats?: fs.Stats;
-  linkTarget?: string;
-  hash?: string;
-}
+export type Executable = string | [string, Array<string>] | [string, Array<string>, SpawnOptions];
 
 /**
- * Type for file operation methods' options.
- * @typedef {Object} FileOptions
- * @property {boolean}  [create]          - Whether to create file if it does not exist.
- * @property {boolean}  [track]           - Whether to track file in registry if it is created by module.
- * @property {boolean}  [force]           - Whether to force create even it is deleted by user.
- * @property {*}        [defaultContent]  - Default content to write if file does not exist.
- * @property {boolean}  [errorNotExists]  - Throw error if file does not exist.
- * @property {boolean}  [parse]           - Whether to parse file content to create a js object.
- * @property {Format}   [format]          - Format to use parsing data.
- * @property {Format}   [createFormat]    - Format to be used while creating nonexisting file if no format is provided.
- * @property {Format}   [serialize]       - Whether to serialize content if file is created. (Default is status of parse option)
- * @property {Array}    [sortKeys]        - Keys to be sorted. Keys may be given as chained paths. (i.e. `a.b.c` -> Keys of c would be sorted)
+ * Type for returned value from CLI command.
+ * @typedef {Object} ScriptResult
+ * @property {number}                 status              - Exit status code of cli command (0: success, other value: error)
+ * @property {Error}                  [error]             - Error object if execution of cli command fails.
+ * @property {Array.<ScriptResult>}   [previousResults]   - If more than one command is executed serially, results of prevoulsy executed commands.
+ * @property {boolean}                [exit]              - Whether script should exit after finishes its job. (Default behaviour is exit/true)
  */
-export interface FileOptions {
-  create?: boolean;
-  defaultContent?: { [key: string]: any } | string;
-  throwNotExists?: boolean;
-  format?: Format;
-  createFormat?: Format;
-  track?: boolean;
-  sortKeys?: Path[];
-  force?: boolean;
-  parse?: boolean;
-  serialize?: boolean;
-}
+export type ScriptResult = { status: number; error?: Error; previousResults?: Array<ScriptResult>; exit?: boolean };
 
 /**
- * Type for registry
- * @typedef {Object} Registry
- * @property {Object.<string, Operation[] | string>}  files       - Object which stores files. Keys are file names relative to root, values are array of operations (for data files), hash (for regular files) or target file (for symbolic links)
- * @property {Array.<string>}                         directories - List of directories created.
+ * Type for script function.
+ * @typedef {Function} Script
+ * @param {Project}         project     - Project instance.
+ * @param {Array.<string>}  args        - Argument.
+ * @param {ScriptKit}       scriptKit   - {@link ScriptKit} instance, which have utility methods fro currently executed script file.
  */
-export type Registry = {
-  createdDataFiles: Array<string>;
-  files: { [key: string]: Operation[] | string };
-  directories: Array<string>;
-};
+export type Script = (project: Project, args: Array<string>, scriptKit: ScriptKit) => ScriptResult | Array<ScriptResult>; // SpawnSyncReturns<Buffer>; import { SpawnSyncReturns } from "child_process";
 
-/* istanbul ignore next */
-const docMe = 1;
+const jsdoc = 1;
