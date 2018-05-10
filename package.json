@@ -4,6 +4,7 @@
   "description": "experiment",
   "main": "lib/index",
   "types": "lib/index",
+  "files": ["lib", "bin", "@types"],
   "scripts": {
     "build": "moe-scripts build",
     "build:doc": "moe-scripts doc --no-cache",
