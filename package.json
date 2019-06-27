@@ -2,27 +2,22 @@
   "name": "@fortibase/scrap2",
   "version": "0.0.4",
   "description": "experiment",
-  "main": "lib/index",
-  "types": "lib/index",
+  "keywords": [],
+  "engines": {
+    "node": ">=10.8.0"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "files": [
-    "lib",
-    "bin",
-    "@types"
+    "/bin",
+    "/lib/**/!(*.spec|*.test)*.*",
+    "/dist/**/!(*.spec|*.test)*.*",
+    "/@types",
+    "/bundle"
   ],
-  "scripts": {
-    "build": "moe-scripts build",
-    "build:doc": "moe-scripts doc --no-cache",
-    "commit": "moe-scripts commit",
-    "file": "f() { P=$1; P=${P/src/lib}; P=${P/.ts/.js}; tsc-watch --onSuccess \"node -r source-map-support/register ${P}\"; }; f",
-    "format": "moe-scripts format",
-    "lint": "moe-scripts lint",
-    "prepublishOnly": "npm run build",
-    "release": "git checkout master && git pull origin master && standard-version && git push --follow-tags origin master && npm publish",
-    "squash": "BRANCH=`git rev-parse --abbrev-ref HEAD` && git checkout master && git merge --squash $BRANCH && npm run commit",
-    "test": "moe-scripts test",
-    "test:update": "moe-scripts test --updateSnapshot",
-    "validate": "moe-scripts validate",
-    "watch": "concurrently 'npm run build -- --watch' 'npm run test -- --watch' | awk '{gsub(/\\033c/,\"\") system(\"\")}1'"
+  "homepage": "https://github.com/ozum/scrap2#readme",
+  "bugs": {
+    "url": "https://github.com/ozum/scrap2/issues"
   },
   "repository": {
     "type": "git",
@@ -30,35 +25,23 @@
   },
   "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/ozum/scrap2/issues"
-  },
-  "homepage": "https://github.com/ozum/scrap2#readme",
-  "devDependencies": {
-    "@fortibase/scrap": "0.0.13",
-    "@types/arrify": "^1.0.3",
-    "@types/cosmiconfig": "^4.0.0",
-    "@types/cross-spawn": "^6.0.0",
-    "@types/fs-extra": "^5.0.2",
-    "@types/glob": "^5.0.35",
-    "@types/lodash.pickby": "^4.6.3",
-    "@types/node": "^10.0.6",
-    "@types/read-pkg-up": "^3.0.1",
-    "@types/verror": "^1.10.3",
-    "@types/which": "^1.3.1",
-    "internal-data": "^0.3.1"
+  "scripts": {
+    "build": "tsc",
+    "docs:dev": "vuepress dev docs",
+    "docs:build": "npm-run-all -p docs:build-api-html docs:build-api-md && vuepress build docs",
+    "docs:build-api-html": "rm -rf docs/.vuepress/public/api-site && typedoc --plugin typedoc-plugin-example-tag,typedoc-neo-theme --theme ./node_modules/typedoc-neo-theme/bin/default --mode file --out docs/.vuepress/public/api-site",
+    "docs:build-api-md": "rm -rf docs/nav.02.api && typedoc --platform vuepress --plugin typedoc-plugin-example-tag,typedoc-plugin-markdown --excludeExternals --excludePrivate --excludeProtected --theme markdown --mode file --out docs/nav.02.api --readme none && cp assets/api-docs/* docs/nav.02.api/",
+    "format": "prettier --write --config .prettierrc --check 'src/**/*.+(js|jsx|json|less|css|ts|tsx|md|vue|gql)'",
+    "lint": "eslint --ignore-path .gitignore --cache 'src/**/*.+(js|jsx|ts|tsx|vue)'",
+    "test": "NODE_ENV=test jest --coverage --coverageThreshold={\"global\":{\"branches\":100,\"functions\":100,\"lines\":100,\"statements\":100}}",
+    "test:watch": "NODE_ENV=test jest --watch",
+    "validate": "npm-run-all -p lint test",
+    "commit": "git-cz",
+    "commit:add": "git add -A && npm run commit",
+    "release": "npm-run-all build commit:add && git checkout master && git pull origin master && standard-version --no-verify && git push --follow-tags origin master && npm publish"
   },
   "dependencies": {
-    "arrify": "^1.0.1",
-    "cosmiconfig": "^4.0.0",
-    "cross-spawn": "^6.0.5",
-    "fs-extra": "^6.0.0",
-    "glob": "^7.1.2",
-    "lodash.pickby": "^4.6.0",
-    "manage-path": "^2.0.0",
-    "read-pkg-up": "^3.0.0",
-    "resettable-file": "^0.3.2",
-    "verror": "^1.10.0",
-    "which": "^1.3.0"
-  }
+    "@fortibase/scrap": "0.0.35"
+  },
+  "devDependencies": {}
 }
