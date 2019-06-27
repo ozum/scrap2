@@ -1,3 +1,3 @@
 export default function n(x: number): number {
-  return x + 1;
+  return x + 2;
 }
